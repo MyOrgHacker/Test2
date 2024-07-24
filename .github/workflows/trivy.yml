@@ -20,7 +20,7 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.HACKER }}
+        password: ${{ secrets.YOUR_GITHUB_TOKEN }}
 
     - name: Install Trivy
       run: |
@@ -39,18 +39,9 @@ jobs:
       run: |
         IMAGE_ID=ghcr.io/${{ github.repository }}
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_ID:test --format json --output trivy-report.json
+        trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_ID:test --format sarif --output trivy-report.sarif
 
-    - name: Perform Scan
-      uses: ShiftLeftSecurity/scan-action@master
-      env:
-        WORKSPACE: ""
-        GITHUB_TOKEN: ${{ secrets.HACKER }}
-        SCAN_AUTO_BUILD: true
-      with:
-        output: reports
-     
-    - name: Upload report
+    - name: Upload SARIF report
       uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: reports
+        sarif_file: trivy-report.sarif
