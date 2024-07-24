@@ -9,21 +9,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.HACKER }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.HACKER }}
 
-    - name: Build and push Docker image
-      run: |
-        IMAGE_ID=ghcr.io/${{ github.repository }}
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-        TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
-        TAG_WITH_TIME="test"
-        echo "Building Docker image with tag: $TAG_WITH_TIME"
-        docker image build --build-arg BUILD_TIME="$TIMESTAMP" -t $IMAGE_ID:$TAG_WITH_TIME .
-        docker image push $IMAGE_ID:$TAG_WITH_TIME
+      - name: Build and push Docker image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo "Building Docker image with tag: test"
+          docker image build -t $IMAGE_ID:test .
+          docker image push $IMAGE_ID:test
+
