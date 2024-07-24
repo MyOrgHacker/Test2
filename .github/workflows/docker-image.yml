@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
@@ -16,14 +16,14 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.YOUR_GITHUB_TOKEN }}
+        password: ${{ secrets.HACKER }}
 
     - name: Build and push Docker image
       run: |
         IMAGE_ID=ghcr.io/${{ github.repository }}
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
         TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
-        TAG_WITH_TIME="test-repository-devsecops"
+        TAG_WITH_TIME="test"
         echo "Building Docker image with tag: $TAG_WITH_TIME"
         docker image build --build-arg BUILD_TIME="$TIMESTAMP" -t $IMAGE_ID:$TAG_WITH_TIME .
         docker image push $IMAGE_ID:$TAG_WITH_TIME
