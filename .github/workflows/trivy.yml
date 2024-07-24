@@ -41,7 +41,22 @@ jobs:
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
         trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_ID:test --format sarif --output trivy-report.sarif
 
-    - name: Upload SARIF report
-      uses: github/codeql-action/upload-sarif@v2
+    # - name: Upload SARIF report
+    #   uses: github/codeql-action/upload-sarif@v2
+    #   with:
+    #     sarif_file: trivy-report.sarif
+    - name: Upload Trivy scan report
+      uses: actions/upload-artifact@v3
       with:
-        sarif_file: trivy-report.sarif
+        name: trivy-scan-report
+        path: trivy-report.json
+
+    - name: Download Trivy scan report
+      uses: actions/download-artifact@v3
+      with:
+        name: trivy-scan-report
+        path: ./trivy-scan-report
+
+    - name: Display scan report
+      run: |
+        cat ./trivy-scan-report/trivy-report.json
