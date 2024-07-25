@@ -1,6 +1,8 @@
 name: SL Scan
+
 on:
   workflow_call:
+    branches: [main]
   push:
     branches: [main]
   pull_request:
