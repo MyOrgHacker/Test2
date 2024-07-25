@@ -6,13 +6,23 @@ on:
       - '**/*.md'
       - '**/*.txt'
   workflow_dispatch:
-  
+
 jobs:
+  build:
+    name: Build Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build
+        run: echo "Building..."
+
   docker:
     needs: build
     name: Build docker image
     uses: ./.github/workflows/docker-image.yml
     secrets: inherit
+
   trivy:
     needs: build
     name: Build trivy scan
