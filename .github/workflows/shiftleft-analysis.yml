@@ -7,14 +7,14 @@ on:
   pull_request:
     branches: [main]
 
+permissions: write-all
+
 jobs:
   Scan-Build:
     # Scan runs on ubuntu, mac and windows
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-      with:
-        permissions: write-all
         fetch-depth: 0
     # Instructions
     # 1. Setup JDK, Node.js, Python etc depending on your project type
