@@ -28,3 +28,9 @@ jobs:
     name: Build trivy scan
     uses: ./.github/workflows/trivy.yml
     secrets: inherit
+
+  SlScan:
+    needs: build
+    name: Build SL scan
+    uses: ./.github/workflows/shiftleft-analysis.yml
+    secrets: inherit
