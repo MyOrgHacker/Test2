@@ -36,6 +36,13 @@ jobs:
     - name: Upload report
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: reports.sarif
+        name: report
+        path: reports.sarif
         # Used to differentiate multiple results for one commit
         category: my-analysis-tool
+
+    - name: Download Trivy scan report
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        name: report
+        path: ./report
