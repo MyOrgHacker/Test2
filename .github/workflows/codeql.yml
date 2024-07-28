@@ -53,12 +53,14 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{ matrix.language }}-${{ github.run_id }}"
+        output: ${{ matrix.language }}.sarif
 
-    - name: Debug List working directory
-      run: ls -la
+    - name: Debug List SARIF file
+      run: ls -la ./*javascript-typescript.sarif* || echo "SARIF file not found"
 
     - name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: ${{ matrix.language }}.sarif
+        category: "/language:${{ matrix.language }}-${{ github.run_id }}"
         wait-for-processing: true
