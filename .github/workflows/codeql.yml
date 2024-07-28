@@ -54,7 +54,7 @@ jobs:
       with:
         output: ${{ matrix.language }}.sarif
 
-    - name: Debug: List SARIF file
+    - name: Debug List SARIF file
       run: ls -la ./${{ matrix.language }}.sarif || echo "SARIF file not found"
 
     - name: Upload SARIF file
