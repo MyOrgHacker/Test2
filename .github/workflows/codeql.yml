@@ -32,7 +32,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        output: results.sarif
+        output: javascript.sarif
         category: 'javascript-analysis'  # Unique category for this analysis
 
     - name: List files for debugging
@@ -42,7 +42,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: codeql-sarif
-        path: results.sarif
+        path: javascript.sarif
 
   upload-sarif:
     name: Upload SARIF
@@ -67,5 +67,5 @@ jobs:
     - name: Upload SARIF File to GitHub
       uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: results.sarif
+        sarif_file: javascript.sarif
         category: 'javascript-analysis'  # Match the unique category specified above
