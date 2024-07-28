@@ -55,7 +55,7 @@ jobs:
         category: "/language:${{ matrix.language }}"
         output: ${{ matrix.language }}.sarif
 
-    - name: Debug: List working directory
+    - name: Debug List working directory
       run: ls -la
 
     - name: Upload SARIF file
