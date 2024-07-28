@@ -35,6 +35,12 @@ jobs:
         output: results.sarif
         category: 'javascript-analysis'  # Unique category for this analysis
 
+    - name: Upload SARIF as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: codeql-sarif
+        path: results.sarif
+
   upload-sarif:
     name: Upload SARIF
     runs-on: ubuntu-latest
@@ -45,6 +51,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Download SARIF artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: codeql-sarif
+        path: ./
 
     - name: Upload SARIF File to GitHub
       uses: github/codeql-action/upload-sarif@v2
