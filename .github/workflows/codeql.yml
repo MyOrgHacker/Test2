@@ -54,7 +54,7 @@ jobs:
       with:
         category: "/language:${{ matrix.language }}-${{ github.run_id }}"
 
-    - name: Debug: List working directory
+    - name: Debug List working directory
       run: ls -la
 
     - name: Upload SARIF file
