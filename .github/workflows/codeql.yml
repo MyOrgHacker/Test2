@@ -35,6 +35,9 @@ jobs:
         output: results.sarif
         category: 'javascript-analysis'  # Unique category for this analysis
 
+    - name: List files for debugging
+      run: ls -la
+
     - name: Upload SARIF as artifact
       uses: actions/upload-artifact@v3
       with:
@@ -57,6 +60,9 @@ jobs:
       with:
         name: codeql-sarif
         path: ./
+
+    - name: List files for debugging
+      run: ls -la
 
     - name: Upload SARIF File to GitHub
       uses: github/codeql-action/upload-sarif@v2
