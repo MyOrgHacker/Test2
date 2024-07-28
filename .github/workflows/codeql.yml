@@ -3,9 +3,9 @@ name: "CodeQL"
 on:
   workflow_call:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     - cron: '35 21 * * 4'
 
@@ -52,7 +52,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:${{ matrix.language }}/$(date +%s)"
         output: ${{ matrix.language }}.sarif
 
     - name: Debug List working directory
