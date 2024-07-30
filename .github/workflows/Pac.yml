@@ -28,7 +28,7 @@ jobs:
         rules: |
           - id: critical-code-scanning-alerts
             description: "Fail the build if there are any critical code scanning alerts."
-            severity: critical
+            severity: High
             type: code-scanning-alerts
         fail-on-violation: true
         token: ${{ secrets.HACKER }}
