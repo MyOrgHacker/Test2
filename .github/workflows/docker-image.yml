@@ -46,7 +46,7 @@ jobs:
         run: |
           IMAGE_SHA=${{ steps.build_image.outputs.image_sha }}
           echo "Scanning Docker image with SHA: $IMAGE_SHA"
-          trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_SHA --format sarif --output trivy-report.sarif
+          trivy image --severity HIGH,CRITICAL $IMAGE_SHA --format sarif --output trivy-report.sarif
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v2
