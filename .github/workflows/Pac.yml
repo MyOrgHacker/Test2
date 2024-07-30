@@ -30,7 +30,7 @@ jobs:
                       -H "X-GitHub-Api-Version: 2022-11-28" \
                       https://api.github.com/repos/MyOrgHacker/Test2/code-scanning/alerts?state=open)
         
-        echo "$alerts" | jq '.'
+        echo "$alerts" | jq '.'  # For debugging, to see the full response
 
         CRITICAL_COUNT=$(echo "$alerts" | jq '[.[] | select(.rule.severity == "critical")] | length')
         echo "Critical count: $CRITICAL_COUNT"
