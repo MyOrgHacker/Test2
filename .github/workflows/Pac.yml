@@ -1,14 +1,13 @@
 name: Policy as Code
 
 on:
-  workflow_call:
   push:
     branches:
       - main
   pull_request:
     branches:
       - main
-      
+
 permissions:
   security-events: read
   contents: read
@@ -25,11 +24,5 @@ jobs:
     - name: Advance Security Policy as Code
       uses: advanced-security/policy-as-code@v2.8.0
       with:
-        rules: |
-          - id: critical-code-scanning-alerts
-            description: "Fail the build if there are any critical code scanning alerts."
-            severity: critical
-            type: code-scanning-alerts
-        fail-on-violation: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.HACKER }}
+        severity: critical
+        token: ${{ secrets.HACKER }}  # Ensure the token is correctly set up
