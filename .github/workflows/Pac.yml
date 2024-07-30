@@ -1,13 +1,14 @@
 name: Policy as Code
 
 on:
+  workflow_call:
   push:
     branches:
       - main
   pull_request:
     branches:
       - main
-
+      
 permissions:
   security-events: read
   contents: read
@@ -21,6 +22,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Set up GitHub CLI
+      uses: cli/cli@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Advance Security Policy as Code
       uses: advanced-security/policy-as-code@v2.8.0
       with:
@@ -30,3 +36,5 @@ jobs:
             severity: critical
             type: code-scanning-alerts
         fail-on-violation: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.HACKER }}
