@@ -16,20 +16,24 @@ jobs:
       - name: Build
         run: echo "Building..."
 
-  docker:
-    needs: build
-    name: Build docker image
-    uses: ./.github/workflows/docker-image.yml
-    secrets: inherit
 
-  trivy:
+  CodeQL:
     needs: build
-    name: Build trivy scan
-    uses: ./.github/workflows/trivy.yml
-    secrets: inherit
+    name: Build Codeql Scan 
+    uses: ./.github/workflows/codeql_new.yml
+    secrets: inherit   
 
   SlScan:
     needs: build
     name: Build SL scan
     uses: ./.github/workflows/shiftleft-analysis.yml
+    secrets: inherit  
+
+  docker:
+    needs: build
+    name: Build docker image and perform trivy scan push image
+    uses: ./.github/workflows/docker-image.yml
     secrets: inherit
+
+
+  
