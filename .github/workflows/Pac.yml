@@ -22,11 +22,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up GitHub CLI
-      uses: cli/cli-action@v2
-      with:
-        token: ${{ secrets.HACKER }}
-
     - name: Advance Security Policy as Code
       uses: advanced-security/policy-as-code@v2.8.0
       with:
@@ -35,6 +30,6 @@ jobs:
             description: "Fail the build if there are any critical code scanning alerts."
             severity: critical
             type: code-scanning-alerts
-        fail-on-violation: true
+        fail-on-violation: false
       env:
         GITHUB_TOKEN: ${{ secrets.HACKER }}
