@@ -6,11 +6,23 @@ on:
   push:
     branches: [main]
 
+permissions: write-all
+
 jobs:
-  build:
+  build_and_scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.HACKER }}
 
       - name: Build Docker image
         run: |
@@ -18,3 +30,28 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           echo "Building Docker image with tag: test"
           docker image build -t $IMAGE_ID:test .
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install wget -y
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.30.0/trivy_0.30.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.30.0_Linux-64bit.deb
+
+      - name: Scan Docker image for vulnerabilities
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_ID:test --format sarif --output trivy-report.sarif
+
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-report.sarif
+
+      - name: Push Docker image if scan is successful
+        if: success()
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker image push $IMAGE_ID:test
