@@ -25,13 +25,16 @@ jobs:
           password: ${{ secrets.HACKER }}
 
       - name: Build Docker image
+        id: build_image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_TAG=${{ github.sha }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           echo "Building Docker image with tag: $IMAGE_TAG"
           docker image build -t $IMAGE_ID:$IMAGE_TAG .
-
+          IMAGE_SHA=$(docker inspect --format='{{index .Id}}' $IMAGE_ID:$IMAGE_TAG)
+          echo "::set-output name=image_sha::$IMAGE_SHA"
+          
       - name: Install Trivy
         run: |
           sudo apt-get update -y
@@ -41,20 +44,20 @@ jobs:
 
       - name: Scan Docker image for vulnerabilities
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}
-          IMAGE_TAG=${{ github.sha }}
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_ID:$IMAGE_TAG --format sarif --output trivy-report.sarif
+          IMAGE_SHA=${{ steps.build_image.outputs.image_sha }}
+          echo "Scanning Docker image with SHA: $IMAGE_SHA"
+          trivy image --severity LOW,MEDIUM,HIGH,CRITICAL $IMAGE_SHA --format sarif --output trivy-report.sarif
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: trivy-report.sarif
 
-      - name: Push Docker image 
+      - name: Push Docker image if scan is successful
         if: success()
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_TAG=${{ github.sha }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo "Pushing Docker image with tag: $IMAGE_TAG"
           docker image push $IMAGE_ID:$IMAGE_TAG
