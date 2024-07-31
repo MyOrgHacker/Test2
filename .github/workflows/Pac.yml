@@ -17,21 +17,18 @@ permissions:
 jobs:
   policy-as-code:
     runs-on: ubuntu-latest
-    username: ${{ github.actor }}
-    password: ${{ secrets.HACKER }}
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      token: ${{ secrets.HACKER }}
 
     - name: Advance Security Policy as Code
-      uses: advanced-security/policy-as-code@latest
+      uses: advanced-security/policy-as-code@v2.8.0
       with:
         rules: |
-          - id: critical-code-scanning-alerts
+          - id: critical
             description: "Fail the build if there are any critical code scanning alerts."
             severity: critical
             type: code-scanning-alerts
         fail-on-violation: true
-        
+        token: ${{ secrets.HACKER }}
