@@ -27,5 +27,5 @@ jobs:
       with:
           policy-path: defaults/policy.yml
           policy-branch: main
-          debug: argvs
+          argvs: abc
           token: ${{ secrets.HACKER }}
