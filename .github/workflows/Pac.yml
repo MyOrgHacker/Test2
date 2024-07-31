@@ -27,5 +27,5 @@ jobs:
       with:
           policy-path: defaults/policy.yml
           policy-branch: main
-      fail-on-violation: true
-      token: ${{ secrets.HACKER }}
+          fail-on-violation: true
+          token: ${{ secrets.HACKER }}
