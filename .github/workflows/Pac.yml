@@ -27,5 +27,6 @@ jobs:
       with:
           policy-path: defaults/policy.yml
           policy-branch: main
-          argvs: abc
+          action: continue
+          argvs: "--disable-dependency-licensing --disable-dependencies"
           token: ${{ secrets.HACKER }}
