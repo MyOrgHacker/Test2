@@ -34,13 +34,22 @@ jobs:
           docker image build -t $IMAGE_ID:$IMAGE_TAG .
           IMAGE_SHA=$(docker inspect --format='{{index .Id}}' $IMAGE_ID:$IMAGE_TAG)
           echo "::set-output name=image_sha::$IMAGE_SHA"
-          
+
       - name: Install Trivy
         run: |
           sudo apt-get update -y
           sudo apt-get install wget -y
           wget https://github.com/aquasecurity/trivy/releases/download/v0.30.0/trivy_0.30.0_Linux-64bit.deb
           sudo dpkg -i trivy_0.30.0_Linux-64bit.deb
+    
+      - name: Advance Security Policy as Code
+        uses: advanced-security/policy-as-code@v2.8.0
+        with:
+          policy-path: defaults/policy.yml
+          policy-branch: main
+          action: break
+          argvs: "--disable-dependency-licensing --disable-dependencies"
+          token: ${{ secrets.HACKER }}
 
       - name: Scan Docker image for vulnerabilities
         run: |
