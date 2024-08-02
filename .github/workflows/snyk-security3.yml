@@ -1,23 +1,14 @@
-name: snyk-labs/action example - Snyk Issues to Github Issues
-on: 
-  push:
-    branches:
-      - main
+name: Example workflow for Node using Snyk
+on: push
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: snyk/actions/setup@master
-      - uses: actions/setup-node@v1
-      - name: snyk test
-        run: snyk test --all-projects --severity-threshold=high --sarif-file-output=snyk.sarif
-        continue-on-error: true
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
         env:
-          SNYK_TOKEN: ${{ secrets.SYNK_KEY }}
-      - uses: snyk-labs/actions/sarif-to-gh-issues@main
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          sarif_file: snyk.sarif
-        env:
-          GITHUB_TOKEN: ${{ github.HACKER }}
+          args: --severity-threshold=high
           
