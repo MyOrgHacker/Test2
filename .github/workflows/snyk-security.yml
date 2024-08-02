@@ -10,3 +10,7 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SYNK_KEY }}
+        with:
+          command: test
+
+      
