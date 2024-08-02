@@ -1,18 +1,23 @@
-name: Example workflow for Node using Snyk
-on: push
+name: snyk-labs/action example - Snyk Issues to Github Issues
+on: 
+  push:
+    branches:
+      - main
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        continue-on-error: true # To make sure that SARIF upload gets called
+      - uses: actions/checkout@v2
+      - uses: snyk/actions/setup@master
+      - uses: actions/setup-node@v1
+      - name: snyk test
+        run: snyk test --all-projects --severity-threshold=high --sarif-file-output=snyk.sarif
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SYNK_KEY }}
-        with:
-          args: --sarif-file-output=snyk.sarif
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+      - uses: snyk-labs/actions/sarif-to-gh-issues@main
         with:
           sarif_file: snyk.sarif
+        env:
+          GITHUB_TOKEN: ${{ github.HACKER }}
+          REMOTE_REPO_URL: ${{ github.https://github.com/MyOrgHacker/Test2}}
