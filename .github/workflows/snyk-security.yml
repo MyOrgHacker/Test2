@@ -1,5 +1,12 @@
 name: workflow for Maven using Snyk security scan
-on: push
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions: write-all
+
 jobs:
   security:
     runs-on: ubuntu-latest
