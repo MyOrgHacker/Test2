@@ -15,4 +15,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SYNK_KEY }}
         with:
-          command: test
+          command: code test
