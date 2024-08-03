@@ -29,6 +29,12 @@ jobs:
     uses: ./.github/workflows/shiftleft-analysis.yml
     secrets: inherit  
 
+  SnykScan:
+    needs: build
+    name: Build Snyk scan
+    uses: ./.github/workflows/snyk-security.yml
+    secrets: inherit    
+
   docker:
     needs: build
     name: Build docker image and perform trivy scan push image
